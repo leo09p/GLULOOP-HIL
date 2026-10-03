@@ -42,7 +42,7 @@ PENDIENTE: indicar qué variable representa esta figura e incorporar el análisi
 La siguiente figura presenta el comportamiento de la administración de insulina durante el escenario de **100 gCH/día**.
 
 <p align="center">
-  <img src="Results/Simulation/Summary/Figures/insulina100g.png" width="850" alt="Administración de insulina - 100 gCH/día">
+  <img src="insulina100g" width="850" alt="Administración de insulina - 100 gCH/día">
 </p>
 
 **Comentario:**  
