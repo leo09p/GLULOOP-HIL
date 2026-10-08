@@ -19,7 +19,7 @@ El puerto COM17 corresponde a la configuración del equipo utilizado durante el 
 
 ## Comunicación con GLULOOP
 
-La comunicación con la aplicación Android GLULOOP se gestiona mediante el programa [`adrc.py`](../adrc.py).
+La comunicación con la aplicación Android GLULOOP se gestiona mediante el programa [`servidor_parametros.py`](../servidor_parametros.py).
 
 Este programa permite intercambiar información con la tarjeta mediante comunicación serial y establecer una conexión WebSocket con la aplicación móvil.
 
