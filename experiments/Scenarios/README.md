@@ -1,27 +1,49 @@
 
-# Escenarios de evaluación
+# Escenarios de alimentación
 
-Esta carpeta documenta los escenarios de alimentación utilizados para evaluar el comportamiento del controlador ADRC en el simulador UVA/Padova T1DM.
+Esta carpeta contiene los scripts de MATLAB utilizados para configurar los escenarios de alimentación considerados en la evaluación del controlador ADRC.
 
-Se consideraron dos escenarios de ingesta diaria de carbohidratos, aplicados a los diez pacientes adultos virtuales.
+Los escenarios se definieron mediante tres comidas distribuidas durante un periodo de 24 horas de tiempo simulado.
 
-Cada ensayo comprendió 24 horas de tiempo simulado.
+## Escenarios evaluados
 
-## Escenarios
+| Parámetro | Escenario 100 gCH | Escenario 130 gCH |
+|---|---|---|
+| Duración | 1440 min | 1440 min |
+| Pacientes evaluados en simulación | 10 adultos | 10 adultos |
+| Desayuno (06:00) | 30 gCH | 40 gCH |
+| Almuerzo (13:00) | 40 gCH | 50 gCH |
+| Cena (19:00) | 30 gCH | 40 gCH |
+| **Total diario** | **100 gCH** | **130 gCH** |
 
-| Escenario | Desayuno | Almuerzo | Cena | Total |
-|---|---:|---:|---:|---:|
-| [100gCH/](100gCH/) | 30 gCH | 40 gCH | 30 gCH | 100 gCH |
-| [130gCH/](130gCH/) | 40 gCH | 50 gCH | 40 gCH | 130 gCH |
+## Archivos
 
-Las comidas se programaron a las 06:00, 13:00 y 19:00 horas.
+| Archivo | Descripción |
+|---|---|
+| `Escenario_100gCH.m` | Script destinado a configurar el escenario de 100 gCH/día. |
+| `Escenario_130gCH.m` | Script destinado a configurar el escenario de 130 gCH/día. |
 
-## Objetivo
+**Nota:** Los nombres se actualizarán cuando se incorporen los archivos definitivos.
 
-Los escenarios permiten evaluar la respuesta del controlador ante perturbaciones alimentarias de diferente magnitud.
+## Objetivo de los escenarios
 
-Se utilizaron las mismas condiciones de alimentación para los diez pacientes dentro de cada escenario, con el fin de analizar las diferencias en sus respuestas.
+Los dos escenarios permiten evaluar la respuesta del controlador ante perturbaciones alimentarias de diferente magnitud.
+
+El escenario de 130 gCH/día representa la mayor carga de carbohidratos considerada en el estudio.
+
+## Ejecución
+
+Los scripts se utilizan junto con el entorno de simulación correspondiente.
+
+**PENDIENTE:** documentar las instrucciones de ejecución y las variables que configura cada archivo, una vez incorporadas sus versiones definitivas.
 
 ## Resultados
 
-Los resultados individuales y consolidados se encuentran en [Results/Simulation/](../../Results/Simulation/).
+- [Resultados de simulación](../../Results/Simulation/)
+- [Resultados HIL](../../Results/HIL/)
+
+Los ensayos HIL se realizaron con los pacientes #3 y #8 para 100 gCH/día y con el paciente #10 para 130 gCH/día.
+
+## Consideraciones
+
+Los scripts publicados deben contener únicamente código que pueda distribuirse sin incluir componentes propietarios del simulador UVA/Padova.
