@@ -1,9 +1,11 @@
 
 # Implementación de controladores
 
-Esta carpeta contiene los modelos desarrollados en MATLAB/Simulink para la regulación automática de glucosa en el simulador UVA/Padova T1DM, como parte del proyecto **GLULOOP-HIL**.
+Esta carpeta contiene los subsistemas de control desarrollados en MATLAB/Simulink para la regulación automática de glucosa en el simulador UVA/Padova T1DM, como parte del proyecto **GLULOOP-HIL**.
 
 Se incluyen dos estrategias de control: el controlador por rechazo activo de perturbaciones (ADRC), desarrollado como estrategia principal del proyecto, y el controlador proporcional-integral-derivativo (PID), implementado con fines comparativos.
+
+Los archivos proporcionados corresponden únicamente a los subsistemas de control, por lo que requieren su integración en el entorno del simulador UVA/Padova para ejecutar las pruebas.
 
 ## Organización
 
@@ -24,8 +26,8 @@ Los nombres de los archivos son provisionales y deberán actualizarse según los
 
 | Archivo | Descripción |
 |---------|-------------|
-| `Controlador_ADRC.slx` | Modelo de Simulink correspondiente al controlador ADRC propuesto. |
-| `Controlador_PID.slx` | Modelo de Simulink correspondiente al controlador PID utilizado para la comparación de desempeño. |
+| `Controlador_ADRC.slx` | Subsistema de Simulink correspondiente al controlador ADRC propuesto. |
+| `Controlador_PID.slx` | Subsistema de Simulink correspondiente al controlador PID utilizado para la comparación de desempeño. |
 | `Inicializar_Parametros.m` | Script de MATLAB utilizado para configurar las variables y los parámetros necesarios para ejecutar las simulaciones. |
 
 ## Controlador ADRC
@@ -47,7 +49,7 @@ El controlador fue evaluado mediante simulaciones con pacientes virtuales del en
 
 El controlador PID se implementó como una estrategia de comparación para evaluar el desempeño del ADRC.
 
-Su implementación se basó en un método descrito en la literatura científica y se incorporó al entorno de simulación para realizar pruebas bajo condiciones experimentales comparables.
+Su implementación se basó en un método descrito en la literatura científica y se incorporó al entorno UVA/Padova para realizar pruebas bajo condiciones experimentales comparables.
 
 La evaluación permite contrastar las respuestas glucémicas, las acciones de control y las métricas de desempeño obtenidas con ambas estrategias.
 
@@ -61,21 +63,23 @@ La ejecución del script permite disponer de las variables necesarias en el ento
 
 Los parámetros deben corresponder al paciente y a la estrategia de control seleccionados. Si los modelos ADRC y PID requieren configuraciones diferentes, estas deben establecerse de acuerdo con sus respectivos archivos de implementación.
 
-## Ejecución de los modelos
+## Integración con UVA/Padova
 
-Para ejecutar los controladores se requiere MATLAB/Simulink y acceso autorizado al simulador UVA/Padova T1DM.
+Los archivos de Simulink incluidos en esta carpeta corresponden a las implementaciones de los controladores ADRC y PID, y no constituyen modelos completos del simulador UVA/Padova T1DM.
 
-El procedimiento general es el siguiente:
+Para realizar las simulaciones es necesario disponer de una instalación autorizada de UVA/Padova e integrar el controlador seleccionado dentro de su entorno de simulación.
 
-1. Abrir MATLAB y establecer la carpeta `Simulink/` como directorio de trabajo.
-2. Ejecutar `Inicializar_Parametros.m`, cuando corresponda al modelo seleccionado.
-3. Verificar los parámetros asociados al paciente virtual.
-4. Abrir el modelo ADRC o PID en Simulink.
-5. Configurar el escenario experimental correspondiente.
-6. Ejecutar la simulación.
-7. Exportar las señales necesarias para el análisis de resultados.
+Los subsistemas proporcionados permiten incorporar las estrategias de control desarrolladas en el proyecto, manteniendo la interacción con el modelo fisiológico del paciente virtual y los demás componentes del simulador.
 
-La configuración específica puede variar según el controlador y las dependencias utilizadas.
+## Procedimiento general
+
+1. Disponer de MATLAB/Simulink y de una instalación autorizada del simulador UVA/Padova T1DM.
+2. Abrir el entorno de simulación de UVA/Padova.
+3. Incorporar el subsistema correspondiente al controlador ADRC o PID en el modelo del simulador.
+4. Ejecutar el script `Inicializar_Parametros.m`, cuando sea necesario, para cargar las variables requeridas por el controlador.
+5. Configurar el paciente virtual y el escenario de alimentación.
+6. Verificar las conexiones entre el controlador y el simulador.
+7. Ejecutar la simulación y registrar las señales necesarias para el análisis de resultados.
 
 ## Documentación relacionada
 
@@ -86,8 +90,8 @@ La configuración específica puede variar según el controlador y las dependenc
 
 ## Consideraciones
 
-Los modelos se proporcionan con fines académicos y de investigación como parte del desarrollo de GLULOOP-HIL.
+Los archivos proporcionados corresponden únicamente a los subsistemas de control y a sus configuraciones asociadas.
 
-La ejecución de las simulaciones requiere las herramientas y dependencias correspondientes. El repositorio no distribuye archivos propietarios del simulador UVA/Padova T1DM.
+El repositorio no incluye el simulador UVA/Padova T1DM ni sus componentes propietarios. Para reproducir los experimentos es necesario obtener acceso autorizado al simulador e integrar los controladores en el entorno correspondiente.
 
-La plataforma desarrollada constituye un prototipo experimental y no está destinada a la administración clínica de insulina.
+Los modelos se distribuyen con fines académicos y de investigación. La plataforma GLULOOP-HIL constituye un prototipo experimental y no está destinada al uso clínico.
