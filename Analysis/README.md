@@ -1,21 +1,24 @@
 
 # Análisis y procesamiento de resultados
 
-Esta carpeta está destinada a los scripts utilizados para procesar y analizar los datos obtenidos durante las pruebas de simulación y validación HIL de la plataforma GLULOOP-HIL.
+Esta carpeta contiene los scripts de MATLAB utilizados para procesar los datos obtenidos durante las simulaciones y generar los resultados de evaluación del controlador ADRC.
 
-Su propósito es reunir las herramientas de análisis desarrolladas en MATLAB, separándolas de los archivos de resultados experimentales.
+## Procesamiento de resultados
 
-## Organización
+El procesamiento permite organizar los resultados de cada paciente en tres secciones:
 
-| Carpeta | Descripción |
-|---|---|
-| [Metrics/](Metrics/) | Scripts para el cálculo de indicadores de control glucémico y desempeño del controlador. |
-| [Plots/](Plots/) | Scripts para la generación y presentación de gráficas a partir de los datos registrados. |
+- **Datos:** señales registradas durante la simulación.
+- **Graficas:** representaciones de las variables evaluadas.
+- **Metricas:** indicadores de control glucémico y desempeño del controlador.
 
-## Relación con los resultados
+Entre las métricas consideradas se encuentran el tiempo en rango (TIR), el tiempo por encima del rango (TAR), el tiempo por debajo del rango (TBR) y los indicadores de error utilizados para evaluar la respuesta del sistema.
 
-Los scripts de esta sección permiten procesar los datos experimentales y obtener métricas o representaciones gráficas.
+## Archivos
 
-Los resultados generados se encuentran organizados en la carpeta [Results/](../Results/).
+PENDIENTE: indicar el nombre del script de MATLAB, las variables de entrada necesarias y las instrucciones para ejecutarlo.
 
-**Nota:** Los archivos disponibles en esta sección corresponden a herramientas de análisis y no a la implementación del controlador ADRC.
+## Resultados generados
+
+Los archivos producidos durante el procesamiento se encuentran organizados en [Results/Simulation/](../Results/Simulation/), separados por escenario y paciente.
+
+Esta carpeta contiene las herramientas de análisis, mientras que los resultados obtenidos se conservan en `Results/`.
