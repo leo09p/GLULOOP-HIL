@@ -3,24 +3,44 @@
 
 Esta carpeta contiene la documentación de las interfaces de comunicación utilizadas en la plataforma hardware-in-the-loop (HIL) del proyecto GLULOOP-HIL.
 
+La arquitectura combina comunicación serial y WebSocket para intercambiar información entre el simulador UVA/Padova T1DM, la tarjeta Texas Instruments LAUNCHXL-F28379D y la aplicación Android GLULOOP.
+
 ## Comunicación serial entre UVA/Padova y LAUNCHXL-F28379D
 
-La comunicación entre el simulador UVA/Padova T1DM y la tarjeta Texas Instruments LAUNCHXL-F28379D se realiza mediante bloques de comunicación serial implementados en MATLAB/Simulink.
+La comunicación entre el simulador UVA/Padova T1DM y la tarjeta LAUNCHXL-F28379D se realiza mediante bloques de comunicación serial implementados en MATLAB/Simulink.
 
-La Figura 1 presenta el esquema utilizado para recibir y transmitir las señales entre ambos componentes.
+La siguiente figura presenta el esquema utilizado para intercambiar las señales entre ambos componentes.
 
 ![Esquema de comunicación serial](Comunicacion_Serial.png)
 
-**Figura 1.** Esquema de comunicación serial implementado en Simulink para el intercambio de información entre el simulador y la tarjeta LAUNCHXL-F28379D.
+**Figura 1.** Esquema de comunicación serial implementado en Simulink.
 
-En la configuración presentada se utiliza el puerto COM17, con una velocidad de transmisión de 115200 baudios. Los bloques de conversión de datos permiten trabajar con señales de tipo `single`, mientras que los bloques de recepción y transmisión gestionan el intercambio de información con la tarjeta.
+En la configuración presentada se utiliza el puerto `COM17`, con una velocidad de transmisión de **115200 baudios**.
 
-El puerto COM17 corresponde a la configuración del equipo utilizado durante el desarrollo y debe ajustarse según el puerto asignado en cada computador.
+El esquema incluye bloques de recepción y transmisión serial, conversiones al tipo de dato `single` y agrupación de señales para su envío.
 
-## Comunicación con GLULOOP
+El puerto COM17 corresponde a la configuración del computador utilizado durante el desarrollo y puede variar según el equipo.
 
-La comunicación con la aplicación Android GLULOOP se gestiona mediante el programa [`servidor_parametros.py`](../servidor_parametros.py).
+## Comunicación entre la tarjeta y GLULOOP
 
-Este programa permite intercambiar información con la tarjeta mediante comunicación serial y establecer una conexión WebSocket con la aplicación móvil.
+La comunicación con la aplicación Android GLULOOP se gestiona mediante el programa [`servidor_parametros.py`](../Python/servidor_parametros.py).
 
-La arquitectura permite visualizar variables del sistema, como la glucosa, la insulina y la insulina activa estimada (IOB), además de intercambiar los parámetros de configuración disponibles.
+Este programa se ejecuta en el computador y actúa como intermediario entre la tarjeta LAUNCHXL-F28379D y la aplicación móvil.
+
+Para ello, utiliza comunicación serial con la tarjeta y una conexión WebSocket con GLULOOP.
+
+Esta arquitectura permite intercambiar las variables seleccionadas para su visualización, incluyendo glucosa, insulina e insulina activa estimada (IOB), así como los parámetros de configuración disponibles en la aplicación.
+
+## Interfaces utilizadas
+
+| Interfaz | Comunicación | Función |
+|----------|---------------|---------|
+| SCI_A | UVA/Padova ↔ LAUNCHXL-F28379D | Intercambio de información entre el simulador y el controlador. |
+| SCI_B | LAUNCHXL-F28379D ↔ Python | Comunicación entre la tarjeta y el programa de Python. |
+| WebSocket | Python ↔ GLULOOP | Intercambio de variables y parámetros con la aplicación Android. |
+
+## Consideraciones
+
+Para reproducir la comunicación es necesario configurar los puertos seriales y las conexiones de red según el computador y los dispositivos utilizados.
+
+Los formatos de datos y parámetros de comunicación deben ser compatibles con las implementaciones correspondientes en Simulink, la tarjeta y la aplicación Android.
