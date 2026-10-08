@@ -17,4 +17,4 @@ El documento PDF incluido en esta carpeta reúne:
 
 Estos resultados permiten observar las diferencias dinámicas entre los pacientes y evaluar la capacidad de los modelos simplificados para aproximar sus respuestas.
 
-El procedimiento experimental se documenta en [Experiments/Open-loop/](../../Experiments/Open-loop/).
+
