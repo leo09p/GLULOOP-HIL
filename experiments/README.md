@@ -1,29 +1,30 @@
 
 # Protocolos experimentales
 
-Esta carpeta reúne la documentación de los procedimientos utilizados para la identificación de la dinámica glucosa-insulina y la evaluación del controlador ADRC desarrollado para la plataforma GLULOOP-HIL.
+Esta carpeta contiene los archivos y la documentación asociados a la configuración de los experimentos realizados para evaluar el controlador ADRC de la plataforma GLULOOP-HIL.
 
-Los experimentos se realizaron utilizando pacientes adultos virtuales del simulador UVA/Padova T1DM.
+Las pruebas se desarrollaron utilizando pacientes adultos virtuales del simulador UVA/Padova T1DM.
 
 ## Organización
 
 | Carpeta | Descripción |
 |---|---|
-| [Open-loop/](Open-loop/) | Procedimiento de identificación de modelos dinámicos mediante ensayos en lazo abierto. |
-| [Scenarios/](Scenarios/) | Definición de los escenarios de alimentación utilizados para evaluar el controlador. |
+| [Scenarios/](Scenarios/) | Scripts de MATLAB para configurar los escenarios de alimentación utilizados durante las simulaciones. |
 
-## Etapas experimentales
+## Evaluación experimental
 
-El desarrollo experimental comprende:
+Se consideraron dos escenarios de alimentación, correspondientes a ingestas diarias de 100 y 130 gCH.
 
-1. Identificación de la dinámica glucosa-insulina de los pacientes virtuales.
-2. Evaluación del controlador ADRC mediante simulaciones de 24 horas.
-3. Validación de la implementación sobre la plataforma Hardware-in-the-Loop (HIL).
+Cada escenario se evaluó durante 24 horas de tiempo simulado sobre diez pacientes adultos virtuales.
 
-Los resultados de estas etapas se encuentran en [Results/](../Results/).
+Adicionalmente, se realizaron tres ensayos Hardware-in-the-Loop (HIL):
+
+- Paciente #3: 100 gCH/día.
+- Paciente #8: 100 gCH/día.
+- Paciente #10: 130 gCH/día.
+
+Los resultados de las evaluaciones se encuentran en [Results/](../Results/).
 
 ## Consideraciones
 
-Los protocolos se documentan para facilitar la comprensión de las condiciones experimentales y la interpretación de los resultados.
-
-El simulador UVA/Padova no se distribuye en este repositorio debido a sus condiciones de licencia.
+El simulador UVA/Padova T1DM no se distribuye en este repositorio debido a sus condiciones de licencia.
