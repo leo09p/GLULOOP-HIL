@@ -8,8 +8,8 @@ Se consideraron dos escenarios de ingesta diaria de carbohidratos, con una durac
 
 | Escenario | Desayuno (06:00) | Almuerzo (13:00) | Cena (19:00) |
 |---|---:|---:|---:|
-| [100gCH/](100gCH/) | 30 gCH | 40 gCH | 30 gCH |
-| [130gCH/](130gCH/) | 40 gCH | 50 gCH | 40 gCH |
+| [100gCH/](100g/) | 30 gCH | 40 gCH | 30 gCH |
+| [130gCH/](130g/) | 40 gCH | 50 gCH | 40 gCH |
 
 Cada escenario contiene los resultados individuales de los diez pacientes, organizados en carpetas de datos, gráficas y métricas.
 
