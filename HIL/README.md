@@ -5,31 +5,35 @@ Esta carpeta reúne los archivos y la documentación relacionados con la impleme
 
 En esta configuración, el simulador UVA/Padova T1DM se ejecuta en un computador, mientras que el controlador ADRC y sus componentes asociados se ejecutan sobre la tarjeta Texas Instruments LAUNCHXL-F28379D.
 
-La plataforma incorpora comunicación UART para intercambiar información con el computador y un puente desarrollado en Python para transmitir las variables a la aplicación Android GLULOOP.
+## Arquitectura de la plataforma
 
-## Arquitectura general
+La comunicación se realiza mediante dos interfaces seriales independientes de la tarjeta:
 
-El sistema está compuesto por:
+- **SCI_A:** permite el intercambio de información entre MATLAB/Simulink, donde se ejecuta el simulador UVA/Padova, y el controlador implementado en la LAUNCHXL-F28379D.
+- **SCI_B:** utiliza comunicación UART para transmitir información desde la tarjeta hacia el programa Python ejecutado en el computador, que actúa como puente con la aplicación Android GLULOOP.
 
-1. **Simulador UVA/Padova:** representa la dinámica glucosa-insulina de los pacientes virtuales.
-2. **LAUNCHXL-F28379D:** ejecuta el controlador ADRC, el filtro de Kalman, el ESO y los mecanismos de supervisión y restricción de insulina.
-3. **Comunicación UART:** permite el intercambio de información mediante la interfaz SCI_B de la tarjeta.
-4. **Puente Python:** gestiona la comunicación serial y la transmisión de información mediante WebSocket.
-5. **GLULOOP:** permite visualizar las variables del sistema desde una aplicación Android.
+Python utiliza WebSocket para establecer la comunicación con la aplicación móvil.
+
+## Componentes principales
+
+1. **UVA/Padova:** simulador de pacientes virtuales con diabetes tipo 1.
+2. **LAUNCHXL-F28379D:** plataforma embebida encargada de ejecutar el controlador ADRC, el filtro de Kalman, el ESO y los mecanismos de supervisión y restricción de insulina.
+3. **SCI_A:** interfaz de comunicación entre el simulador y la tarjeta.
+4. **SCI_B:** interfaz UART utilizada para la transmisión de variables hacia el puente Python.
+5. **Python:** programa intermediario entre la comunicación serial y GLULOOP.
+6. **GLULOOP:** aplicación Android para visualizar las variables del sistema.
 
 ## Organización
 
 | Carpeta | Descripción |
 |---|---|
 | [Embedded/](Embedded/) | Implementación del controlador sobre la tarjeta Texas Instruments. |
-| [Communication/](Communication/) | Comunicación UART, puente Python y protocolos de intercambio de información. |
+| [Communication/](Communication/) | Comunicación mediante SCI_A, SCI_B, Python y WebSocket. |
 
 ## Resultados
 
-Los resultados de los ensayos HIL se encuentran en [Results/HIL/](../Results/HIL/).
+Los resultados de las pruebas HIL se encuentran en [Results/HIL/](../Results/HIL/).
 
 ## Alcance
 
-La plataforma fue desarrollada para investigación y validación experimental utilizando pacientes virtuales.
-
-No constituye un dispositivo médico ni está destinada a la administración clínica de insulina.
+La plataforma fue desarrollada para investigación y validación experimental con pacientes virtuales. No constituye un dispositivo médico ni está destinada a la administración clínica de insulina.
