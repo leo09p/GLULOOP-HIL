@@ -1,15 +1,17 @@
+
 # GLULOOP-HIL
 
 ### Plataforma de simulación Hardware-in-the-Loop para validación de estrategias de control en páncreas artificial
 
 <p align="center">
   <strong>Trabajo de grado · Ingeniería Electrónica</strong><br>
-  Universidad Industrial de Santander · Bucaramanga, 2026
+  Universidad Industrial de Santander · Bucaramanga, Colombia · 2026
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Estado-En%20desarrollo-yellow" alt="Estado">
+  <img src="https://img.shields.io/badge/Estado-Finalizado-brightgreen" alt="Estado">
   <img src="https://img.shields.io/badge/MATLAB-Simulink-orange" alt="MATLAB">
+  <img src="https://img.shields.io/badge/Control-ADRC%20%7C%20PID-blue" alt="Control">
   <img src="https://img.shields.io/badge/HIL-TI%20C2000-red" alt="HIL">
   <img src="https://img.shields.io/badge/Android-GLULOOP-green" alt="Android">
   <img src="https://img.shields.io/badge/Python-3.x-blue" alt="Python">
@@ -18,10 +20,10 @@
 | | |
 |---|---|
 | **Autores** | Leonel Ricardo Araque Carreño · Paula Dayana Torres Mejía |
-| **Director** | José Jorge Carreño Zagarra, Ph.D. |
+| **Director** | José Jorge Carreño Zagarra, Ph. D. |
 | **Institución** | Universidad Industrial de Santander |
 | **Programa** | Ingeniería Electrónica |
-| **Documento de tesis** | `PENDIENTE: enlace al repositorio institucional` |
+| **Año** | 2026 |
 
 > [!IMPORTANT]
 > Este proyecto fue desarrollado exclusivamente con fines académicos y de investigación. No constituye un dispositivo médico y no debe utilizarse para administrar insulina ni para tomar decisiones relacionadas con el tratamiento de personas con diabetes.
@@ -31,60 +33,63 @@
 ## Tabla de contenido
 
 1. [Sobre el proyecto](#sobre-el-proyecto)
-2. [Arquitectura](#arquitectura)
-3. [Estrategia de control](#estrategia-de-control)
+2. [Arquitectura de la plataforma](#arquitectura-de-la-plataforma)
+3. [Estrategias de control](#estrategias-de-control)
 4. [Escenarios experimentales](#escenarios-experimentales)
-5. [GLULOOP](#gluloop)
-6. [Resultados](#resultados)
+5. [Aplicación GLULOOP](#aplicación-gluloop)
+6. [Resultados y validación](#resultados-y-validación)
 7. [Estructura del repositorio](#estructura-del-repositorio)
-8. [Tecnologías y reproducibilidad](#tecnologías-y-reproducibilidad)
-9. [Ejecución rápida](#ejecución-rápida)
-10. [Limitaciones](#limitaciones)
-11. [Estado del proyecto](#estado-del-proyecto)
-12. [Cómo citar](#cómo-citar)
-13. [Licencia y uso](#licencia-y-uso)
+8. [Tecnologías utilizadas](#tecnologías-utilizadas)
+9. [Reproducción de los experimentos](#reproducción-de-los-experimentos)
+10. [Documentación](#documentación)
+11. [Limitaciones](#limitaciones)
+12. [Estado del proyecto](#estado-del-proyecto)
+13. [Cómo citar](#cómo-citar)
+14. [Licencia y uso](#licencia-y-uso)
 
 ---
 
 ## Sobre el proyecto
 
-**GLULOOP-HIL** es una plataforma experimental desarrollada para implementar y validar estrategias de control orientadas a sistemas de páncreas artificial mediante pruebas **Hardware-in-the-Loop (HIL)**.
+**GLULOOP-HIL** es una plataforma experimental desarrollada para implementar y validar estrategias de control orientadas a sistemas de páncreas artificial mediante simulaciones y pruebas **Hardware-in-the-Loop (HIL)**.
 
-El proyecto utiliza el simulador **UVA/Padova T1DM** para representar pacientes virtuales con Diabetes Mellitus Tipo 1 (DMT1) e implementa una estrategia de **Control por Rechazo Activo de Perturbaciones (ADRC)** para la regulación automática de glucosa.
+El proyecto utiliza el simulador **UVA/Padova T1DM** para representar la dinámica glucosa-insulina de pacientes virtuales con diabetes mellitus tipo 1.
+
+La estrategia principal desarrollada corresponde al **Control por Rechazo Activo de Perturbaciones (ADRC)**, complementado con mecanismos de estimación, supervisión y restricción de la administración de insulina.
+
+Adicionalmente, se implementó un controlador **proporcional-integral-derivativo (PID)** como estrategia de comparación.
 
 La plataforma integra:
 
-- simulación fisiológica en MATLAB/Simulink;
-- acondicionamiento de la señal de glucosa;
-- estimación mediante un Observador de Estado Extendido (ESO);
-- control ADRC;
-- mecanismos de supervisión y seguridad;
-- ejecución del algoritmo sobre hardware;
-- comunicación en tiempo real;
-- aplicación móvil GLULOOP.
+- Simulación fisiológica mediante UVA/Padova T1DM.
+- Identificación de modelos simplificados de la dinámica glucosa-insulina.
+- Implementación de controladores ADRC y PID en MATLAB/Simulink.
+- Procesamiento de la señal CGM mediante un filtro de Kalman.
+- Estimación de estados y perturbaciones mediante un observador de estado extendido (ESO).
+- Mecanismos de supervisión y restricción de insulina.
+- Ejecución del controlador ADRC sobre hardware físico.
+- Comunicación serial y WebSocket.
+- Aplicación Android GLULOOP para visualización y configuración.
 
-Durante las pruebas HIL, el controlador se ejecuta externamente sobre una **Texas Instruments LAUNCHXL-F28379D**, mientras que GLULOOP permite supervisar y configurar los ensayos.
-
-El desarrollo matemático, el procedimiento de identificación, la metodología experimental y el análisis detallado se encuentran en el documento de tesis y en [`docs/`](docs/).
+La implementación HIL utiliza una tarjeta **Texas Instruments LAUNCHXL-F28379D**, encargada de ejecutar el algoritmo de control, mientras que el simulador UVA/Padova representa el comportamiento fisiológico del paciente virtual.
 
 ---
 
-## Arquitectura
+## Arquitectura de la plataforma
 
-La plataforma HIL integra el simulador fisiológico, el controlador embebido y la interfaz móvil.
+La plataforma HIL integra el simulador fisiológico, el controlador implementado en hardware y la aplicación móvil GLULOOP.
 
 ```mermaid
 flowchart LR
-
     subgraph PC["Computador"]
-        UVA["UVA/Padova T1DM<br/>Paciente virtual + CGM"]
-        PY["Python<br/>Puente de comunicación"]
+        UVA["UVA/Padova T1DM<br/>Paciente virtual"]
+        PY["Python<br/>servidor_parametros.py"]
     end
 
     subgraph HW["LAUNCHXL-F28379D"]
         KF["Filtro de Kalman"]
-        ESO["ESO"]
-        ADRC["ADRC"]
+        ESO["Observador ESO"]
+        ADRC["Controlador ADRC"]
         SAFE["Supervisor + IOB SAFE"]
 
         KF --> ESO
@@ -92,172 +97,164 @@ flowchart LR
         ADRC --> SAFE
     end
 
-    APP["GLULOOP<br/>Android"]
+    APP["GLULOOP<br/>Aplicación Android"]
 
-    UVA -->|"CGM"| KF
-    SAFE -->|"Insulina"| UVA
+    UVA -->|"Glucosa CGM · SCI_A"| KF
+    SAFE -->|"Insulina · SCI_A"| UVA
 
-    HW <-->|"UART"| PY
-    PY <-->|"WebSocket / Wi-Fi"| APP
+    HW <-->|"SCI_B · Serial"| PY
+    PY <-->|"WebSocket · Wi-Fi"| APP
 ```
 
-El simulador representa la dinámica fisiológica del paciente y proporciona la medición de glucosa. La tarjeta ejecuta los algoritmos de procesamiento, estimación, control y seguridad.
+El simulador proporciona la información glucémica del paciente virtual y recibe la señal de insulina calculada por el controlador.
 
-Un canal adicional permite transmitir información entre el hardware y GLULOOP mediante una interfaz de comunicación basada en Python y WebSocket.
+La tarjeta ejecuta el procesamiento de señales, la estimación de estados, la ley de control ADRC y los mecanismos de supervisión.
 
-La descripción detallada de la arquitectura se encuentra en [`docs/`](docs/) y [`hil/`](hil/).
+De forma paralela, el programa de Python permite intercambiar información con GLULOOP mediante WebSocket.
+
+La documentación de esta implementación se encuentra en [HIL](HIL/).
 
 ---
 
-## Estrategia de control
+## Estrategias de control
 
-La estrategia implementada está compuesta por:
+### Controlador ADRC
 
-- **Filtro de Kalman:** acondicionamiento de la señal procedente del CGM.
-- **ESO:** observador de estado extendido de tercer orden.
-- **ADRC:** cálculo de la acción de control para la regulación de glucosa.
-- **Supervisor:** modificación de la acción de control según el estado estimado del sistema.
-- **Estimador IOB:** estimación de la insulina activa.
-- **IOB SAFE:** mecanismo de seguridad basado en la cantidad estimada de insulina activa.
-- **Saturaciones:** limitación de la tasa de administración de insulina.
+El controlador ADRC constituye la estrategia principal desarrollada en el proyecto.
 
-El flujo general puede representarse como:
+Su implementación comprende:
 
-```text
-CGM
- │
- ▼
-Filtro de Kalman
- │
- ▼
-ESO
- │
- ▼
-ADRC
- │
- ▼
-Supervisor
- │
- ▼
-IOB SAFE
- │
- ▼
-Insulina
- │
- ▼
-Paciente virtual
-```
+- **Filtro de Kalman:** procesamiento de la señal de glucosa procedente del CGM.
+- **Observador de estado extendido (ESO):** estimación de los estados del sistema y de la perturbación total.
+- **Ley de control ADRC:** cálculo de la acción de control para regular la concentración de glucosa.
+- **Supervisor:** modificación de la acción de control de acuerdo con las condiciones estimadas del sistema.
+- **Estimación de IOB:** cálculo de la insulina activa estimada.
+- **IOB SAFE:** aplicación de restricciones relacionadas con la insulina activa.
+- **Saturaciones:** limitación de la administración de insulina dentro de los valores establecidos.
 
-Para apoyar el diseño del controlador, la dinámica glucosa-insulina de cada paciente fue aproximada mediante modelos **SOPTD (Second-Order Plus Time Delay)** obtenidos a partir de ensayos en lazo abierto.
+Para apoyar el diseño del controlador, se identificaron modelos simplificados de segundo orden con retardo, denominados **SOPTD (Second-Order Plus Time Delay)**, a partir de ensayos en lazo abierto.
 
-La implementación del controlador se encuentra en [`controller/`](controller/).
+### Controlador PID
+
+Se implementó un controlador PID como estrategia de comparación para evaluar el desempeño del ADRC.
+
+El controlador se integró en el entorno de simulación UVA/Padova para realizar pruebas bajo condiciones experimentales comparables.
+
+### Archivos de implementación
+
+Los subsistemas de control se encuentran en:
+
+[Controller/Simulink](Controller/Simulink/)
+
+Estos archivos corresponden a implementaciones de los controladores y no incluyen el simulador UVA/Padova completo.
+
+Para ejecutar las simulaciones es necesario integrar los subsistemas dentro de una instalación autorizada del simulador.
 
 ---
 
 ## Escenarios experimentales
 
-La estrategia se evalúa sobre los **10 pacientes adultos virtuales** disponibles en UVA/Padova.
+La evaluación mediante simulación comprende los **10 pacientes adultos virtuales** del simulador UVA/Padova T1DM.
 
-Se utilizan dos escenarios diarios de ingesta de carbohidratos:
+### Identificación en lazo abierto
+
+Se realizaron ensayos de identificación para obtener modelos simplificados de la dinámica glucosa-insulina.
+
+Los ensayos se desarrollaron durante 24 horas simuladas, sin ingesta de alimentos y aplicando un bolo de insulina de 1 U en el minuto 100.
+
+### Escenarios de alimentación
+
+Se consideraron dos escenarios diarios de ingesta de carbohidratos:
 
 | Escenario | 06:00 | 13:00 | 19:00 | Total |
 |:---|---:|---:|---:|---:|
 | **100 gCH/día** | 30 gCH | 40 gCH | 30 gCH | 100 gCH |
 | **130 gCH/día** | 40 gCH | 50 gCH | 40 gCH | 130 gCH |
 
-Cada ensayo tiene una duración simulada de **24 horas**.
+Cada ensayo comprende **24 horas simuladas**.
 
-Los mismos escenarios son utilizados posteriormente durante la validación Hardware-in-the-Loop para los pacientes seleccionados.
+Se realizaron pruebas con los diez pacientes adultos en ambos escenarios, obteniendo un total de **20 simulaciones** para la evaluación de la estrategia ADRC.
 
-Los archivos asociados a la configuración de los experimentos se encuentran en [`experiments/`](experiments/).
-
----
-
-## GLULOOP
-
-**GLULOOP** es la aplicación Android desarrollada para la supervisión y configuración de la plataforma HIL.
-
-La aplicación permite visualizar información recibida durante los ensayos, incluyendo:
-
-- glucosa;
-- administración de insulina;
-- Insulin on Board (IOB);
-- estado de conexión;
-- tiempo de operación.
-
-También permite configurar parámetros requeridos antes de iniciar una prueba y visualizar información asociada al ensayo.
-
-<!-- PENDIENTE: agregar capturas finales de GLULOOP.
-
-<p align="center">
-  <img src="gluloop/screenshots/monitoring.png" width="30%">
-  <img src="gluloop/screenshots/status.png" width="30%">
-  <img src="gluloop/screenshots/settings.png" width="30%">
-</p>
-
--->
-
-El código fuente de la aplicación se encuentra en [`gluloop/`](gluloop/).
+La configuración experimental se documenta en [Experiments](Experiments/).
 
 ---
 
-## Resultados
+## Aplicación GLULOOP
 
-La validación experimental se encuentra organizada en tres etapas principales.
+**GLULOOP** es una aplicación Android desarrollada como interfaz de visualización y configuración de la plataforma HIL.
 
-### Identificación
+La aplicación permite visualizar variables relacionadas con el funcionamiento del sistema, incluyendo:
 
-Se realizan ensayos en lazo abierto sobre los pacientes virtuales para obtener modelos simplificados de la dinámica glucosa-insulina.
+- Concentración de glucosa.
+- Administración de insulina.
+- Insulina activa estimada (IOB).
+- Estado de conexión.
+- Evolución temporal de las señales.
 
-Los resultados correspondientes se encuentran en:
+También dispone de una interfaz para introducir parámetros de configuración utilizados en la plataforma experimental.
 
-[`results/identification/`](results/identification/)
+### Código fuente e instalación
 
-### Simulación
+La carpeta [Gluloop](Gluloop/) contiene los recursos asociados al desarrollo de la aplicación.
 
-Los 10 pacientes adultos son evaluados bajo los escenarios de:
+Allí se encuentra la implementación para Android Studio y, cuando está disponible, el archivo APK para instalar la aplicación en dispositivos Android compatibles.
 
-- 100 gCH/día;
-- 130 gCH/día.
+La aplicación requiere la infraestructura de comunicación correspondiente para visualizar información procedente de la plataforma HIL.
 
-Para cada paciente se almacenan los datos, gráficas y métricas correspondientes.
+---
 
-Se evalúan indicadores de control glucémico como:
+## Resultados y validación
 
-- **TIR:** tiempo entre 70 y 180 mg/dL;
-- **TAR:** tiempo por encima de 180 mg/dL;
-- **TBR:** tiempo por debajo de 70 mg/dL;
-- glucosa mínima;
-- glucosa máxima.
+La validación del proyecto comprende tres etapas principales.
 
-También se calculan métricas asociadas al desempeño del controlador:
+### 1. Identificación de modelos
 
-- MSE;
-- RMSE;
-- IAE;
-- ISE;
-- ITAE;
-- esfuerzo de control.
+Se realizaron ensayos en lazo abierto para caracterizar la respuesta glucémica de los pacientes virtuales ante la administración de insulina.
 
-Los resultados completos se encuentran en:
-
-[`results/simulation/`](results/simulation/)
-
-### Hardware-in-the-Loop
-
-La estrategia es posteriormente validada mediante la ejecución del controlador sobre la LAUNCHXL-F28379D.
-
-Los resultados incluyen registros de glucosa, administración de insulina y variables asociadas al funcionamiento de la plataforma y de GLULOOP.
+A partir de estos ensayos se obtuvieron modelos SOPTD simplificados para apoyar el diseño y la parametrización del controlador.
 
 Los resultados se encuentran en:
 
-[`results/hil/`](results/hil/)
+[Results/Identification](Results/Identification/)
 
-<!--
-PENDIENTE:
-Agregar aquí una tabla muy pequeña con los resultados principales
-cuando estén consolidados todos los ensayos.
--->
+### 2. Simulación de las estrategias de control
+
+La evaluación del ADRC comprende los diez pacientes adultos bajo los escenarios de 100 y 130 gCH/día.
+
+Se analizaron variables como la concentración de glucosa, la administración de insulina y la acción de control.
+
+Entre los indicadores de desempeño se encuentran:
+
+| Indicador | Descripción |
+|---|---|
+| **TIR** | Porcentaje de tiempo con glucosa entre 70 y 180 mg/dL. |
+| **TAR** | Porcentaje de tiempo con glucosa superior a 180 mg/dL. |
+| **TBR** | Porcentaje de tiempo con glucosa inferior a 70 mg/dL. |
+| **RMSE** | Raíz del error cuadrático medio. |
+| **IAE** | Integral del valor absoluto del error. |
+| **ISE** | Integral del error cuadrático. |
+| **ITAE** | Integral del error absoluto ponderado por el tiempo. |
+| **Esfuerzo de control** | Indicador asociado a la magnitud de la acción de control. |
+
+También se analizaron los valores mínimos y máximos de glucosa, así como los resultados de la comparación con la estrategia PID.
+
+Los datos, gráficas y métricas se encuentran en:
+
+[Results/Simulation](Results/Simulation/)
+
+### 3. Validación Hardware-in-the-Loop
+
+La validación HIL se realizó ejecutando el controlador ADRC en la tarjeta Texas Instruments LAUNCHXL-F28379D.
+
+El simulador UVA/Padova continuó representando la dinámica fisiológica del paciente virtual, mientras que la tarjeta calculó la acción de control.
+
+Los ensayos HIL se realizaron con pacientes seleccionados y permitieron registrar las variables del sistema durante la ejecución sobre hardware.
+
+En esta configuración, los ensayos de 24 horas simuladas se ejecutaron durante **24 horas de tiempo real**.
+
+Los resultados y registros de la plataforma se encuentran en:
+
+[Results/HIL](Results/HIL/)
 
 ---
 
@@ -266,175 +263,162 @@ cuando estén consolidados todos los ensayos.
 ```text
 GLULOOP-HIL/
 │
-├── controller/      # Estrategia de control
-├── experiments/     # Configuración de los experimentos
-├── hil/             # Implementación Hardware-in-the-Loop
-├── gluloop/         # Aplicación móvil Android
-├── analysis/        # Procesamiento, métricas y gráficas
-├── results/         # Resultados experimentales
-├── appendices/      # Anexos del trabajo de grado
-├── docs/            # Documentación técnica
+├── Analysis/          # Procesamiento de datos y métricas
+├── Controller/        # Controladores ADRC y PID
+├── Docs/              # Documentación técnica, tesis y anexos
+├── Experiments/       # Configuración experimental
+├── Gluloop/           # Aplicación Android
+├── HIL/               # Implementación en hardware y comunicación
+├── Results/           # Resultados experimentales
 └── README.md
 ```
 
-### Organización de resultados
+### Descripción de las carpetas
 
-```text
-results/
-│
-├── identification/
-│   ├── patient_01/
-│   ├── ...
-│   ├── patient_10/
-│   └── summary/
-│
-├── simulation/
-│   ├── 100gCH/
-│   │   ├── patient_01/
-│   │   ├── ...
-│   │   └── patient_10/
-│   │
-│   ├── 130gCH/
-│   │   ├── patient_01/
-│   │   ├── ...
-│   │   └── patient_10/
-│   │
-│   └── summary/
-│
-└── hil/
-    ├── 100gCH/
-    ├── 130gCH/
-    └── summary/
-```
+| Carpeta | Contenido |
+|---|---|
+| [Analysis](Analysis/) | Scripts para procesar señales, generar gráficas y calcular métricas. |
+| [Controller](Controller/) | Subsistemas ADRC y PID desarrollados en MATLAB/Simulink. |
+| [Docs](Docs/) | Documentación académica y técnica, incluidos los anexos. |
+| [Experiments](Experiments/) | Configuración de los escenarios de identificación y simulación. |
+| [Gluloop](Gluloop/) | Código fuente y recursos de la aplicación Android. |
+| [HIL](HIL/) | Implementación del controlador en hardware y comunicación con GLULOOP. |
+| [Results](Results/) | Datos, gráficas y resultados de simulación y validación HIL. |
 
-Cada carpeta principal contiene su propio `README.md` con información específica sobre sus archivos y procedimientos.
+Cada sección dispone de documentación específica para facilitar la consulta de sus archivos.
 
 ---
 
-## Tecnologías y reproducibilidad
+## Tecnologías utilizadas
 
 ### Software
 
-| Herramienta | Versión |
+| Herramienta | Aplicación |
 |---|---|
-| MATLAB / Simulink | **PENDIENTE** |
-| System Identification Toolbox | **PENDIENTE** |
-| Soporte de Simulink para TI C2000 | **PENDIENTE** |
-| UVA/Padova T1DM Simulator | **PENDIENTE** |
-| Python | **PENDIENTE** |
-| Android Studio | **PENDIENTE** |
-| Kotlin / Android SDK | **PENDIENTE** |
+| MATLAB/Simulink | Modelado, implementación y simulación de controladores. |
+| UVA/Padova T1DM Simulator v3.2.1 | Simulación fisiológica de pacientes virtuales con diabetes tipo 1. |
+| System Identification Toolbox | Apoyo al proceso de identificación de modelos. |
+| Herramientas de soporte TI C2000 | Implementación del controlador en la tarjeta de desarrollo. |
+| Python | Comunicación entre hardware y aplicación Android. |
+| Android Studio | Desarrollo de la aplicación GLULOOP. |
+| Kotlin | Implementación de la aplicación Android. |
 
 ### Hardware
 
-- Texas Instruments **LAUNCHXL-F28379D**;
-- microcontrolador **TMS320F28379D**;
-- computador para MATLAB/Simulink y UVA/Padova;
-- dispositivo Android;
-- interfaces de comunicación utilizadas en la plataforma.
-
-### Correspondencia entre código y resultados
-
-| Etapa | Implementación / análisis | Resultados |
-|---|---|---|
-| Identificación SOPTD | [`experiments/`](experiments/) | [`results/identification/`](results/identification/) |
-| Simulación | [`controller/`](controller/) | [`results/simulation/`](results/simulation/) |
-| Análisis de métricas | [`analysis/`](analysis/) | [`results/simulation/`](results/simulation/) |
-| Validación HIL | [`hil/`](hil/) | [`results/hil/`](results/hil/) |
-| Aplicación móvil | [`gluloop/`](gluloop/) | [`results/hil/`](results/hil/) |
-
-### UVA/Padova
-
-El **UVA/Padova T1DM Simulator** es una herramienta externa utilizada como representación fisiológica de los pacientes virtuales.
-
-El simulador **no se distribuye como parte de este repositorio**.
-
-Para reproducir completamente los experimentos es necesario disponer de acceso legítimo al simulador y cumplir sus respectivas condiciones de uso y distribución.
+- **Texas Instruments LAUNCHXL-F28379D**, basada en el microcontrolador TMS320F28379D.
+- Computador para ejecutar MATLAB/Simulink, UVA/Padova y el programa de comunicación.
+- Dispositivo Android compatible con GLULOOP.
+- Interfaces de comunicación serial y conexión de red.
 
 ---
 
-## Ejecución rápida
+## Reproducción de los experimentos
 
-> [!NOTE]
-> Esta sección será verificada y completada cuando todos los componentes del repositorio hayan sido consolidados.
+### Requisitos previos
 
-### 1. Obtener el repositorio
+Para reproducir las simulaciones y la implementación HIL se requiere disponer de las herramientas de software, hardware y dependencias correspondientes.
 
-```bash
-git clone PENDIENTE_URL_REPOSITORIO
-cd GLULOOP-HIL
-```
+En particular, el simulador **UVA/Padova T1DM no está incluido en este repositorio**.
 
-### 2. Simulación
+Su utilización requiere acceso autorizado y el cumplimiento de las condiciones de licencia establecidas por sus desarrolladores.
 
-1. Disponer de una instalación autorizada de UVA/Padova.
-2. Consultar la implementación disponible en [`controller/`](controller/).
-3. Seleccionar el paciente y escenario experimental correspondiente.
-4. Ejecutar el ensayo.
-5. Almacenar los resultados para su procesamiento.
+La información sobre el simulador y las herramientas utilizadas se encuentra en [Docs](Docs/).
 
-### 3. Hardware-in-the-Loop
+### Simulaciones en UVA/Padova
 
-1. Conectar la LAUNCHXL-F28379D.
-2. Cargar la implementación correspondiente sobre la tarjeta.
-3. Establecer la comunicación con el entorno de simulación.
-4. Ejecutar el ensayo HIL.
+1. Disponer de una instalación autorizada de UVA/Padova T1DM.
+2. Consultar los subsistemas disponibles en [Controller/Simulink](Controller/Simulink/).
+3. Integrar el controlador ADRC o PID dentro del entorno del simulador.
+4. Inicializar los parámetros correspondientes al controlador y al paciente virtual.
+5. Configurar el escenario experimental.
+6. Ejecutar la simulación y registrar las señales necesarias.
 
-La documentación específica se encuentra en [`hil/`](hil/).
+### Implementación HIL
 
-### 4. GLULOOP
+1. Disponer de la tarjeta LAUNCHXL-F28379D y de las herramientas de desarrollo correspondientes.
+2. Consultar el modelo de Simulink disponible en [HIL/Embedded](HIL/Embedded/).
+3. Configurar e implementar el controlador en la tarjeta.
+4. Establecer la comunicación serial con el simulador UVA/Padova.
+5. Ejecutar el ensayo HIL.
 
-1. Ejecutar el puente de comunicación correspondiente.
-2. Conectar el dispositivo Android a la red utilizada durante el ensayo.
-3. Iniciar GLULOOP.
-4. Verificar la recepción de telemetría.
-5. Configurar los parámetros requeridos antes de comenzar la prueba.
+### Comunicación con GLULOOP
 
-### 5. Análisis
+El programa de comunicación se encuentra en:
 
-Los scripts empleados para procesar los resultados y generar las métricas y figuras se encuentran en:
+[HIL/Communication/Python/servidor_parametros.py](HIL/Communication/Python/servidor_parametros.py)
 
-[`analysis/`](analysis/)
+Para establecer la comunicación se requiere configurar el puerto serial y los parámetros de red correspondientes al equipo utilizado.
 
-<!--
-PENDIENTE:
-Reemplazar esta sección por los comandos y pasos exactos
-una vez organizada la versión final de cada componente.
--->
+La documentación de las interfaces y el esquema de comunicación se encuentra en:
+
+[HIL/Communication/Protocols](HIL/Communication/Protocols/)
+
+### Análisis de resultados
+
+Los scripts empleados para procesar las señales, calcular las métricas y generar las gráficas se encuentran en:
+
+[Analysis](Analysis/)
+
+Los resultados de los experimentos se encuentran organizados en:
+
+[Results](Results/)
+
+---
+
+## Documentación
+
+La carpeta [Docs](Docs/) reúne los documentos académicos y técnicos relacionados con el desarrollo del proyecto.
+
+Incluye el material complementario del trabajo de grado y los recursos necesarios para consultar las herramientas utilizadas.
+
+### Simulador UVA/Padova
+
+Los siguientes enlaces proporcionan información relacionada con el simulador:
+
+- [TEG Virginia](https://tegvirginia.com/)
+- [The UVA/PADOVA Type 1 Diabetes Simulator: New Features](https://doi.org/10.1177/1932296813514502)
+- [UVAPadovaAPI](https://github.com/NeuroDiab/UVAPadovaAPI)
+
+El repositorio no distribuye el simulador original ni sus componentes propietarios.
 
 ---
 
 ## Limitaciones
 
-- La evaluación se realiza *in silico* utilizando pacientes virtuales adultos.
-- La validación HIL se realiza sobre un subconjunto de los pacientes evaluados mediante simulación.
-- Los parámetros y límites experimentales utilizados en la estrategia de control no deben interpretarse como recomendaciones clínicas.
-- La plataforma constituye un entorno experimental de investigación y no un sistema destinado al tratamiento de pacientes reales.
+- La evaluación fisiológica se realiza *in silico*, utilizando pacientes virtuales adultos.
+- La validación HIL comprende pacientes seleccionados de los evaluados mediante simulación.
+- Los modelos SOPTD utilizados son aproximaciones simplificadas de la dinámica glucosa-insulina.
+- La implementación requiere acceso autorizado al simulador UVA/Padova.
+- Los parámetros y límites experimentales de control no deben interpretarse como recomendaciones clínicas.
+- La aplicación GLULOOP y la plataforma HIL corresponden a prototipos experimentales.
 
-La discusión detallada de las limitaciones se encuentra en el documento de tesis.
+La discusión detallada de los alcances y limitaciones se presenta en el trabajo de grado.
 
 ---
 
 ## Estado del proyecto
 
-🚧 **En desarrollo**
+**Finalizado — 2026**
 
-El proyecto se encuentra actualmente en proceso de consolidación y documentación final.
+Se completaron las actividades de desarrollo y validación experimental contempladas en el proyecto:
 
-Entre las actividades pendientes se encuentran:
+- Identificación de modelos simplificados para los pacientes virtuales.
+- Diseño e implementación del controlador ADRC.
+- Implementación del controlador PID para comparación.
+- Evaluación mediante simulaciones en UVA/Padova.
+- Integración del controlador ADRC en la plataforma HIL.
+- Desarrollo de la aplicación Android GLULOOP.
+- Implementación de los mecanismos de comunicación.
+- Procesamiento y análisis de resultados.
+- Organización de los archivos y la documentación del proyecto.
 
-- organización definitiva de los resultados;
-- finalización de las pruebas HIL;
-- incorporación de la estrategia de control de referencia;
-- comparación de estrategias de control;
-- consolidación de anexos;
-- documentación final para reproducibilidad.
+El repositorio reúne los componentes desarrollados y los resultados obtenidos durante el trabajo de grado.
 
 ---
 
 ## Cómo citar
 
-Si utiliza este repositorio o los resultados del trabajo, cite:
+Si utiliza este repositorio o los resultados del proyecto, puede citar el trabajo de grado de la siguiente manera:
 
 ```bibtex
 @thesis{araque_torres_2026_gluloophil,
@@ -448,25 +432,21 @@ Si utiliza este repositorio o los resultados del trabajo, cite:
 }
 ```
 
-<!--
-PENDIENTE:
-Verificar los datos bibliográficos definitivos después de la
-publicación del trabajo en el repositorio institucional de la UIS.
--->
+Los datos bibliográficos pueden complementarse con el enlace institucional cuando el documento se encuentre publicado oficialmente.
 
 ---
 
 ## Licencia y uso
 
-**PENDIENTE:** definir la licencia aplicable al código, documentación y resultados desarrollados por los autores.
+El código, la documentación y los resultados desarrollados por los autores están sujetos a las condiciones de uso y distribución que se establezcan para el repositorio.
 
-Los componentes pertenecientes a terceros conservan sus respectivas condiciones de uso y distribución.
+Los componentes de terceros conservan sus respectivas licencias.
 
-En particular, **UVA/Padova T1DM Simulator no forma parte de este repositorio** y debe obtenerse a través de los canales autorizados correspondientes.
+En particular, el simulador UVA/Padova T1DM no forma parte de este repositorio y debe obtenerse mediante los canales autorizados.
 
 ---
 
-## Aviso
+## Aviso importante
 
 Este repositorio corresponde a una plataforma experimental desarrollada con fines académicos y de investigación.
 
