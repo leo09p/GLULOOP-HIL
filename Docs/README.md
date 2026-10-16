@@ -3,7 +3,7 @@
 
 Esta carpeta reúne la documentación técnica y académica relacionada con el desarrollo de **GLULOOP-HIL**, una plataforma de simulación hardware-in-the-loop (HIL) para la validación de estrategias de control en páncreas artificial.
 
-Su propósito es facilitar la consulta de los documentos que complementan los archivos de implementación, los experimentos y los resultados disponibles en el repositorio.
+Su propósito es facilitar la consulta de los documentos y recursos que complementan los archivos de implementación, los experimentos y los resultados disponibles en el repositorio.
 
 ## Documentación académica
 
@@ -17,50 +17,85 @@ Su propósito es facilitar la consulta de los documentos que complementan los ar
 
 **Director:** José Jorge Carreño Zagarra, Ph. D.
 
-**Institución:** Universidad Industrial de Santander (UIS).
+**Institución:** Universidad Industrial de Santander (UIS), Escuela de Ingenierías Eléctrica, Electrónica y de Telecomunicaciones.
 
-El documento del trabajo de grado presenta los fundamentos teóricos, la metodología, el diseño de los controladores, la implementación HIL y los resultados de validación experimental.
+El trabajo de grado presenta los fundamentos teóricos, la metodología de diseño de los controladores, la implementación de la plataforma HIL y los resultados obtenidos durante su validación experimental.
 
-El archivo PDF podrá consultarse en esta carpeta una vez incorporada su versión definitiva.
+La versión definitiva del documento podrá incorporarse a esta carpeta para facilitar su consulta.
 
 ## Documentación técnica de GLULOOP
 
-Esta sección está destinada a la documentación del desarrollo de la aplicación Android GLULOOP, incluyendo su arquitectura, interfaz y mecanismos de comunicación con la plataforma HIL.
+GLULOOP es la aplicación Android desarrollada como interfaz de visualización y configuración de la plataforma HIL.
 
-La documentación complementa el código fuente disponible en la carpeta [Gluloop](../Gluloop/).
+La documentación técnica de la aplicación comprende aspectos relacionados con su desarrollo, estructura, interfaz gráfica y mecanismos de comunicación con el sistema.
+
+El código fuente y los recursos correspondientes se encuentran en la carpeta [Gluloop](../Gluloop/).
+
+## Simulador UVA/Padova T1DM
+
+El proyecto utiliza el **UVA/Padova Type 1 Diabetes Simulator (T1DMS), versión 3.2.1**, como entorno para evaluar las estrategias de regulación automática de glucosa.
+
+Este simulador permite representar la dinámica glucosa-insulina de pacientes virtuales con diabetes mellitus tipo 1 y analizar la respuesta del sistema ante diferentes condiciones experimentales.
+
+En GLULOOP-HIL se utilizó para evaluar los controladores ADRC y PID mediante simulaciones con pacientes virtuales adultos, así como para implementar los ensayos hardware-in-the-loop.
+
+### Información y acceso al simulador
+
+Los siguientes recursos permiten consultar información sobre UVA/Padova y su utilización:
+
+| Recurso | Enlace |
+|---------|--------|
+| Sitio de referencia del simulador | [TEG Virginia](https://tegvirginia.com/) |
+| Publicación técnica sobre UVA/Padova | [The UVA/PADOVA Type 1 Diabetes Simulator: New Features](https://doi.org/10.1177/1932296813514502) |
+| Interfaz complementaria para el simulador | [UVAPadovaAPI](https://github.com/NeuroDiab/UVAPadovaAPI) |
+
+La disponibilidad del simulador original y las condiciones para obtenerlo deben consultarse con sus desarrolladores o distribuidores autorizados.
+
+El proyecto UVAPadovaAPI es un recurso complementario para trabajar con una instalación existente del simulador académico y no sustituye al software original.
+
+### Integración con GLULOOP-HIL
+
+Los controladores ADRC y PID disponibles en la carpeta [Controller](../Controller/) corresponden a subsistemas desarrollados en MATLAB/Simulink.
+
+Para ejecutar las simulaciones es necesario disponer de una instalación autorizada de UVA/Padova e integrar los subsistemas de control dentro de su entorno.
+
+En la implementación HIL, el simulador representa la dinámica fisiológica del paciente virtual, mientras que el controlador ADRC se ejecuta en la tarjeta Texas Instruments LAUNCHXL-F28379D.
+
+**Nota:** el simulador UVA/Padova y sus componentes propietarios no se distribuyen en este repositorio.
 
 ## Documentación de herramientas
 
-Las siguientes herramientas se utilizaron durante el desarrollo del proyecto. Sus sitios oficiales proporcionan información sobre instalación, configuración y funcionamiento.
+Durante el desarrollo de GLULOOP-HIL se utilizaron herramientas de simulación, programación y desarrollo de sistemas embebidos.
+
+La documentación oficial de estas herramientas puede consultarse en los siguientes enlaces:
 
 | Herramienta | Documentación |
 |-------------|---------------|
-| MATLAB/Simulink | [Documentación oficial de MathWorks](https://www.mathworks.com/help/) |
-| Texas Instruments C2000 | [Documentación y recursos de C2000](https://www.ti.com/microcontrollers-mcus-processors/c2000-real-time-control-mcus/overview.html) |
-| Android Studio | [Documentación oficial de Android Developers](https://developer.android.com/studio) |
-| Python | [Documentación oficial de Python](https://docs.python.org/3/) |
+| MATLAB/Simulink | [MathWorks Documentation](https://www.mathworks.com/help/) |
+| Texas Instruments C2000 | [C2000 Real-Time Control MCUs](https://www.ti.com/microcontrollers-mcus-processors/c2000-real-time-control-mcus/overview.html) |
+| Android Studio | [Android Developers](https://developer.android.com/studio) |
+| Python | [Python Documentation](https://docs.python.org/3/) |
 
-### Simulador UVA/Padova T1DM
+Estos recursos proporcionan información complementaria sobre el funcionamiento, la configuración y el desarrollo de los componentes utilizados en la plataforma.
 
-El simulador UVA/Padova T1DM constituye el entorno utilizado para representar la dinámica glucosa-insulina de los pacientes virtuales.
+## Organización del repositorio
 
-Su utilización requiere acceso autorizado. Los archivos propietarios del simulador no se incluyen en este repositorio.
+La documentación específica de cada componente del proyecto se encuentra en las siguientes carpetas:
 
-## Otras secciones del repositorio
-
-La documentación específica de cada componente se encuentra en las siguientes carpetas:
-
-- [Controller](../Controller/): implementación de los controladores ADRC y PID.
-- [Experiments](../Experiments/): configuración de los escenarios experimentales.
-- [Analysis](../Analysis/): procesamiento de señales y cálculo de métricas.
-- [HIL](../HIL/): implementación en la tarjeta Texas Instruments y comunicación entre componentes.
-- [Gluloop](../Gluloop/): código fuente y recursos de la aplicación Android.
-- [Results](../Results/): resultados de simulación y validación HIL.
+| Carpeta | Contenido |
+|---------|-----------|
+| [Controller](../Controller/) | Subsistemas de control ADRC y PID desarrollados en Simulink. |
+| [Experiments](../Experiments/) | Configuración de los escenarios experimentales. |
+| [Analysis](../Analysis/) | Procesamiento de señales, generación de gráficas y cálculo de métricas. |
+| [HIL](../HIL/) | Implementación del controlador en hardware y comunicación entre componentes. |
+| [Gluloop](../Gluloop/) | Aplicación Android, código fuente y recursos asociados. |
+| [Results](../Results/) | Resultados de simulación y validación HIL. |
+| [Appendices](../Appendices/) | Material complementario del proyecto. |
 
 ## Consideraciones
 
-Los documentos incluidos en esta carpeta tienen fines académicos y de investigación.
+Los documentos y recursos de esta carpeta se proporcionan con fines académicos y de investigación.
 
-Los manuales y materiales de terceros se referencian mediante enlaces oficiales cuando sus condiciones de distribución no permiten incorporarlos directamente al repositorio.
+Los manuales, herramientas y materiales de terceros están sujetos a sus respectivas licencias y condiciones de distribución. Cuando corresponde, se proporcionan enlaces a sus fuentes oficiales en lugar de incorporar copias al repositorio.
 
-La plataforma GLULOOP-HIL es un prototipo experimental y no está destinada al uso clínico.
+GLULOOP-HIL constituye una plataforma experimental para la evaluación de estrategias de control y no está destinada al uso clínico ni a la administración de insulina en pacientes reales.
