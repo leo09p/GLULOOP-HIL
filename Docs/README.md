@@ -90,7 +90,7 @@ La documentación específica de cada componente del proyecto se encuentra en la
 | [HIL](../HIL/) | Implementación del controlador en hardware y comunicación entre componentes. |
 | [Gluloop](../Gluloop/) | Aplicación Android, código fuente y recursos asociados. |
 | [Results](../Results/) | Resultados de simulación y validación HIL. |
-| [Appendices](../Appendices/) | Material complementario del proyecto. |
+
 
 ## Consideraciones
 
