@@ -13,7 +13,7 @@ Para cada paciente se configuró un experimento de 24 horas de tiempo simulado, 
 
 Las respuestas obtenidas se utilizaron para identificar modelos aproximados de segundo orden con tiempo muerto (SOPTD), empleados posteriormente en el diseño del controlador.
 
-**Archivo:** `Identificacion_Lazo_Abierto.m` (pendiente de incorporar o sustituir por la documentación del procedimiento).
+**Archivo:** `Identificacion_Lazo_Abierto.m`.
 
 Los parámetros identificados y las gráficas correspondientes se encuentran en [Results/Identification](../Results/Identification/).
 
