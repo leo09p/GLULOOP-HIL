@@ -111,8 +111,8 @@ Los diez pacientes se ubicaron en las zonas A y B, sin registros en las zonas C,
 
 Los datos, gráficas y métricas correspondientes a cada paciente se encuentran organizados en las carpetas de los respectivos escenarios:
 
-- [100gCH](../100 g/)
-- [130gCH](../130 g/)
+- [100gCH](../100g/)
+- [130gCH](../130g/)
 
 Cada escenario contiene los resultados individuales de los pacientes evaluados, organizados en las subcarpetas correspondientes a **datos, gráficas y métricas**.
 
